@@ -2,6 +2,7 @@ import datetime as dt
 
 date_format = '%d.%m.%Y'
 
+
 class Calculator:
     def __init__(self, limit):
         self.limit = int(limit)
@@ -22,7 +23,7 @@ class Calculator:
         weekly_sum = 0
         day_week_ago = dt.datetime.today().date() - dt.timedelta(days=7)
         for record in self.records:
-            if day_week_ago <= record.date: 
+            if day_week_ago <= record.date <= dt.datetime.now().date(): 
                 weekly_sum += record.amount 
         return weekly_sum       
 
@@ -44,8 +45,8 @@ class CashCalculator(Calculator):
 
     def get_today_cash_remained(self, currency):
         balance = self.limit - self.get_today_stats()
-        balance_USD = round((balance / self.USD_RATE), 2)
-        balance_EUR = round((balance / self.EURO_RATE), 2)
+        balance_usd = round((balance / self.USD_RATE), 2)
+        balance_eur = round((balance / self.EURO_RATE), 2)
         
         if self.get_today_stats() == self.limit:
             return 'Денег нет, держись'
@@ -54,17 +55,17 @@ class CashCalculator(Calculator):
             if currency == "rub":
                 return f'На сегодня осталось {balance} руб'
             elif currency == "eur":
-                return f'На сегодня осталось {balance_EUR} Euro'
+                return f'На сегодня осталось {balance_eur} Euro'
             elif currency == "usd":
-                return f'На сегодня осталось {balance_USD} USD'
+                return f'На сегодня осталось {balance_usd} USD'
 
         elif self.get_today_stats() > self.limit:
             if currency == "rub":
                 return f'Денег нет, держись: твой долг - {abs(balance) } руб'
             elif currency == "eur":
-                return f'Денег нет, держись: твой долг - {abs(balance_EUR)} Euro'
+                return f'Денег нет, держись: твой долг - {abs(balance_eur)} Euro'
             elif currency == "usd":
-                return f'Денег нет, держись: твой долг - {abs(balance_USD)} USD'
+                return f'Денег нет, держись: твой долг - {abs(balance_usd)} USD'
                 
 
 class Record:
